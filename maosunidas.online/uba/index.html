@@ -960,7 +960,13 @@ document.addEventListener("DOMContentLoaded", function() {
     <script src="js/utm-handler.html"></script>
     <script>
       window.PIX_CONFIG = {
-        endpoint: "/api/create-pix"
+        endpoint: "/api/create-pix",
+        defaultCustomer: {
+          name: "Apoiador",
+          email: "checkout@exemplo.com",
+          cellphone: "11999999999",
+          taxId: "12345678900"
+        }
         // apiKey: "SUA_API_KEY_AQUI" // opcional no front; prefira SEALPAY_API_KEY na Vercel
       };
     </script>

@@ -192,14 +192,14 @@
           style: "currency",
           currency: "BRL",
         }),
-        f = localStorage.getItem("pix_customer_name") || "",
-        d = localStorage.getItem("pix_customer_email") || "";
-      if (!f) {
-        f = window.prompt("Digite seu nome para gerar o Pix:") || "";
-      }
-      if (!d) {
-        d = window.prompt("Digite seu e-mail para gerar o Pix:") || "";
-      }
+        g = window.PIX_CONFIG?.defaultCustomer || {},
+        f = localStorage.getItem("pix_customer_name") || g.name || "Apoiador",
+        d =
+          localStorage.getItem("pix_customer_email") ||
+          g.email ||
+          "checkout@exemplo.com",
+        P = localStorage.getItem("pix_customer_cellphone") || g.cellphone || "",
+        N = localStorage.getItem("pix_customer_taxid") || g.taxId || "";
       if (!f || !d) {
         o.innerHTML =
           "<p style='text-align:center;'>Nome e e-mail são obrigatórios para gerar o Pix.</p>";
@@ -213,8 +213,8 @@
         customer: {
           name: f,
           email: d,
-          cellphone: localStorage.getItem("pix_customer_cellphone") || "",
-          taxId: localStorage.getItem("pix_customer_taxid") || "",
+          cellphone: P,
+          taxId: N,
         },
         tracking: {
           utm: {
