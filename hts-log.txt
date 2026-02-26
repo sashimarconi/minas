@@ -1,0 +1,28 @@
+HTTrack3.49-2+htsswf+htsjava launched on Thu, 26 Feb 2026 14:08:45 at https://maosunidas.online/uba/ +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" https://maosunidas.online/uba/ -O1 "C:\My Web Sites\vaks minas" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+14:08:50	Error: 	"Not Found" (404) at link https://maosunidas.online/35072d26-6cd7-4e71-8e4f-5a625bc48a3a/players/68c038d92a168e19b54e92e7/v4/player.js (from https://maosunidas.online/uba/)
+14:08:50	Error: 	"Not Found" (404) at link https://maosunidas.online/lib/js/smartplayer-wc/v4/smartplayer.js (from https://maosunidas.online/uba/)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/js/utm-handler.js (from https://maosunidas.online/uba/)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/window.location.href (from https://maosunidas.online/uba/)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/targetUrl (from https://maosunidas.online/uba/)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/destino, window.location.origin (from https://maosunidas.online/uba/)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/signals/config/ (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/t (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/e (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/signals/plugins/ (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/schema.org/ (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/t.resolvedLink (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/o (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/signals/iwl.js (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/signals/iwl.js?pixel_id= (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/n.dl (from https://connect.facebook.net/en_US/fbevents.js)
+14:08:53	Error: 	"Not Found" (404) at link https://maosunidas.online/uba/n.rl (from https://connect.facebook.net/en_US/fbevents.js)
+
+HTTrack Website Copier/3.49-2 mirror complete in 8 seconds : 28 links scanned, 10 files written (903617 bytes overall) [530924 bytes received at 66365 bytes/sec], 649338 bytes transferred using HTTP compression in 25 files, ratio 28%, 5.6 requests per connection
+(17 errors, 0 warnings, 0 messages)
