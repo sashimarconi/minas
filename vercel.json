@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/maosunidas",
+      "destination": "/maosunidas/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/maosunidas/:path*",
+      "destination": "/maosunidas.online/uba/:path*"
+    }
+  ]
+}
