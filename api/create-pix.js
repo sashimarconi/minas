@@ -54,6 +54,17 @@ module.exports = async function handler(req, res) {
       return res.status(upstream.status).json(data);
     }
 
+    if (
+      (data && typeof data === "object" && data.error) ||
+      (data && typeof data === "object" && data.success === false)
+    ) {
+      return res.status(502).json(
+        typeof data === "object"
+          ? data
+          : { error: "Gateway retornou erro inesperado" }
+      );
+    }
+
     const root = data && typeof data === "object" ? data : {};
     const nested =
       root.data && typeof root.data === "object"
@@ -96,6 +107,7 @@ module.exports = async function handler(req, res) {
         detalhes: {
           message: "Resposta inesperada do gateway",
           keys: Object.keys(root),
+          raw: root,
         },
       });
     }

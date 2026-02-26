@@ -239,7 +239,11 @@
         .then((n) => n.json().then((k) => ({ ok: n.ok, status: n.status, body: k })))
         .then((n) => {
           if (!n.ok) {
-            let k = n.body?.error || "Erro ao criar pagamento";
+            let k =
+              n.body?.detalhes?.message ||
+              n.body?.message ||
+              n.body?.error ||
+              "Erro ao criar pagamento";
             throw new Error(`${k} (HTTP ${n.status})`);
           }
           let k = n.body || {};
