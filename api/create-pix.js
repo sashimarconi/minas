@@ -9,27 +9,38 @@ module.exports = async function handler(req, res) {
     const amount = Number(body.amount);
     const customer = body.customer || {};
     const endpoint =
-      process.env.SEALPAY_CREATE_PIX_URL || "https://abacate-5eo1.onrender.com/create-pix";
+      process.env.SEALPAY_CREATE_PIX_URL ||
+      process.env.PIX_GATEWAY_URL ||
+      process.env.CREATE_PIX_URL ||
+      "";
     const apiKey = process.env.SEALPAY_API_KEY || body.api_key || "";
+    const timeoutMs = Number(process.env.SEALPAY_TIMEOUT_MS || 20000);
 
     if (!Number.isInteger(amount) || amount < 100) {
-      return res.status(400).json({ error: "amount inválido (centavos, mínimo 100)" });
+      return res.status(400).json({ error: "amount invalido (centavos, minimo 100)" });
     }
     if (!customer.name || !customer.email) {
-      return res
-        .status(400)
-        .json({ error: "customer.name e customer.email são obrigatórios" });
+      return res.status(400).json({ error: "customer.name e customer.email sao obrigatorios" });
     }
     if (!apiKey) {
       return res.status(500).json({
-        error: "SEALPAY_API_KEY não configurada",
+        error: "SEALPAY_API_KEY nao configurada",
         detalhes: { message: "Configure env var SEALPAY_API_KEY na Vercel" },
+      });
+    }
+    if (!endpoint) {
+      return res.status(500).json({
+        error: "SEALPAY_CREATE_PIX_URL nao configurada",
+        detalhes: {
+          message:
+            "Configure SEALPAY_CREATE_PIX_URL (ou PIX_GATEWAY_URL / CREATE_PIX_URL) na Vercel",
+        },
       });
     }
 
     const payload = {
       amount,
-      description: body.description || "Doação",
+      description: body.description || "Doacao",
       customer: {
         name: customer.name,
         email: customer.email,
@@ -43,11 +54,14 @@ module.exports = async function handler(req, res) {
       user_agent: body.user_agent || req.headers["user-agent"] || "",
     };
 
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
     const upstream = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-    });
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timer));
 
     const data = await upstream.json().catch(() => ({}));
     if (!upstream.ok) {
@@ -59,9 +73,7 @@ module.exports = async function handler(req, res) {
       (data && typeof data === "object" && data.success === false)
     ) {
       return res.status(502).json(
-        typeof data === "object"
-          ? data
-          : { error: "Gateway retornou erro inesperado" }
+        typeof data === "object" ? data : { error: "Gateway retornou erro inesperado" }
       );
     }
 
@@ -101,6 +113,7 @@ module.exports = async function handler(req, res) {
       source.payment_id ||
       (source.pix && source.pix.txid) ||
       null;
+
     if (!qr || !code) {
       return res.status(500).json({
         error: "Erro ao gerar QR Code Pix",
