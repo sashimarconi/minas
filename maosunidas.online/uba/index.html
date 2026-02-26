@@ -958,6 +958,12 @@ document.addEventListener("DOMContentLoaded", function() {
         defer
     ></script> -->
     <script src="js/utm-handler.html"></script>
+    <script>
+      window.PIX_CONFIG = {
+        endpoint: "/api/create-pix"
+        // apiKey: "SUA_API_KEY_AQUI" // opcional no front; prefira SEALPAY_API_KEY na Vercel
+      };
+    </script>
     <script src="js/main.js"></script>
     <script src="js/confetti.browser.min.js"></script>
 
@@ -988,29 +994,24 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function confirmModalDonation() {
-        // Mapeamento de links de checkout externos diretos
-        const checkoutLinks = {
-            10: "https://www.pagamentos-seguro.link/checkout/9dc776d6-4784-4366-9809-2da5ea22ee69",
-            30: "https://www.pagamentos-seguro.link/checkout/a5c9c1da-7da3-4583-9570-14ed499d4484",
-            50: "https://www.pagamentos-seguro.link/checkout/8a294dda-febe-4ec9-8b5e-67e643003f23",
-            75: "https://www.pagamentos-seguro.link/checkout/83ed9519-b341-41bf-b1f5-96d58033efd2",
-            100: "https://www.pagamentos-seguro.link/checkout/0a6ed76f-2e55-49fa-9d88-ab6fb3ac3347",
-            200: "https://www.pagamentos-seguro.link/checkout/a351acaa-2264-4f9a-8951-be062cb3b8c9",
-            500: "https://www.pagamentos-seguro.link/checkout/97668da3-b0d7-4281-9eaa-b54a490c8863",
-            1000: "https://www.pagamentos-seguro.link/checkout/2e9df020-5b27-4362-a193-b269e2cad8df"
-        };
+        // Fecha o popup custom e usa o fluxo Pix interno (main.js)
+        closeModal();
+        const cents = Math.round(Number(selectedAmount) * 100);
 
-        const targetUrl = checkoutLinks[selectedAmount] || checkoutLinks[50];
-        
-        // Redirecionamento direto com preservação de parâmetros da URL (UTMs)
-        const currentUrl = new URL(window.location.html);
-        const targetWithParams = new URL(targetUrl.html);
-        
-        currentUrl.searchParams.forEach((value, key) => {
-            targetWithParams.searchParams.set(key, value);
-        });
+        const apiButton = document.querySelector(`.js-apiPix-toggle[data-value="${selectedAmount}"]`);
+        if (apiButton) {
+            apiButton.click();
+            return;
+        }
 
-        window.location.href = targetWithParams.toString();
+        const customInput = document.querySelector('.js-apiPrices-input');
+        const customBtn = document.querySelector('.js-apiPrices-button.js-apiPix-toggle');
+        if (customInput && customBtn) {
+            customInput.value = `R$ ${Number(selectedAmount).toFixed(2).replace('.', ',')}`;
+            customInput.dispatchEvent(new Event('input', { bubbles: true }));
+            customBtn.setAttribute('data-value', (cents / 100).toFixed(2));
+            customBtn.click();
+        }
     }
 
     // Popup será aberto apenas quando clicar nos buttons
