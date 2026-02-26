@@ -983,6 +983,101 @@ header nav button svg {
   flex-shrink: 0;
   margin: 0;
 }
+.l-dialog--pixPayment .l-dialog__box {
+  max-width: 480px;
+  border-radius: 18px;
+  background: #f5f6f8;
+  padding: 20px 18px;
+}
+.l-dialog--pixPayment__box__pagamento .pix-card-clean {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.l-dialog--pixPayment__box__pagamento .pix-brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #17c964;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 42px;
+  text-align: center;
+  margin: 0 auto;
+}
+.l-dialog--pixPayment__box__pagamento .pix-subtitle {
+  margin: 0;
+  color: #6a6f77;
+}
+.l-dialog--pixPayment__box__pagamento .pix-total {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.l-dialog--pixPayment__box__pagamento .pix-total strong {
+  color: #06a254;
+}
+.l-dialog--pixPayment__box__pagamento .pix-instruction {
+  margin: 0 0 4px;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.l-dialog--pixPayment__box__pagamento .pix-qr-wrap {
+  width: 186px;
+  height: 186px;
+  margin: 0 auto;
+  border: 1px solid #e3e6ea;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+}
+.l-dialog--pixPayment__box__pagamento .pix-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0;
+}
+.l-dialog--pixPayment__box__pagamento .pix-divider::before,
+.l-dialog--pixPayment__box__pagamento .pix-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #d7dbe2;
+}
+.l-dialog--pixPayment__box__pagamento .pix-divider span {
+  margin: 0;
+  color: #6a6f77;
+  font-size: 18px;
+}
+.l-dialog--pixPayment__box__pagamento .pix-help-box {
+  background: #eceff3;
+  border-radius: 12px;
+  padding: 14px;
+}
+.l-dialog--pixPayment__box__pagamento .pix-help-box h3 {
+  margin-top: 0;
+}
+.l-dialog--pixPayment__box__pagamento .pix-help-box ul {
+  gap: 12px;
+}
+.l-dialog--pixPayment__box__pagamento .pix-help-box li {
+  align-items: flex-start;
+}
+.l-dialog--pixPayment__box__pagamento .pix-bullet {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #dbe1e8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #4c5563;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
 .notificacao {
   background-color: #fff;
   border-radius: 50px;
