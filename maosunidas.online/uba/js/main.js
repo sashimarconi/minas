@@ -26,11 +26,15 @@
           a.preventDefault();
         });
       }),
-      document
-        .querySelector(".j-apoio-toggle")
-        .addEventListener("click", () => {
-          document.querySelector(".js-apoio").classList.toggle("is-active");
-        });
+      (() => {
+        let e = document.querySelector(".js-apoio-toggle"),
+          a = document.querySelector(".js-apoio");
+        e &&
+          a &&
+          e.addEventListener("click", () => {
+            a.classList.toggle("is-active");
+          });
+      })();
     function v() {
       let e = document.getElementById("toast");
       e.classList.add("show"),
