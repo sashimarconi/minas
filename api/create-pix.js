@@ -54,13 +54,49 @@ module.exports = async function handler(req, res) {
       return res.status(upstream.status).json(data);
     }
 
-    const qr = data.pix_qr_code || data.pixQrCode;
-    const code = data.pix_code || data.pixCode;
-    const txid = data.txid || data.id || null;
+    const root = data && typeof data === "object" ? data : {};
+    const nested =
+      root.data && typeof root.data === "object"
+        ? root.data
+        : root.payment && typeof root.payment === "object"
+          ? root.payment
+          : root.pix && typeof root.pix === "object"
+            ? root.pix
+            : {};
+    const source = { ...root, ...nested };
+
+    const qr =
+      source.pix_qr_code ||
+      source.pixQrCode ||
+      source.qr_code ||
+      source.qrCode ||
+      source.qr_code_base64 ||
+      source.qrCodeBase64 ||
+      (source.pix && source.pix.qr_code) ||
+      (source.pix && source.pix.qrCode);
+    const code =
+      source.pix_code ||
+      source.pixCode ||
+      source.pix_string ||
+      source.emv ||
+      source.payload ||
+      source.brcode ||
+      (source.pix && source.pix.code) ||
+      (source.pix && source.pix.pix_code);
+    const txid =
+      source.txid ||
+      source.id ||
+      source.transaction_id ||
+      source.payment_id ||
+      (source.pix && source.pix.txid) ||
+      null;
     if (!qr || !code) {
       return res.status(500).json({
         error: "Erro ao gerar QR Code Pix",
-        detalhes: { message: "Resposta inesperada do gateway" },
+        detalhes: {
+          message: "Resposta inesperada do gateway",
+          keys: Object.keys(root),
+        },
       });
     }
 
