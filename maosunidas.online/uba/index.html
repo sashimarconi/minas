@@ -996,21 +996,10 @@ document.addEventListener("DOMContentLoaded", function() {
     function confirmModalDonation() {
         // Fecha o popup custom e usa o fluxo Pix interno (main.js)
         closeModal();
-        const cents = Math.round(Number(selectedAmount) * 100);
-
-        const apiButton = document.querySelector(`.js-apiPix-toggle[data-value="${selectedAmount}"]`);
-        if (apiButton) {
-            apiButton.click();
-            return;
-        }
-
-        const customInput = document.querySelector('.js-apiPrices-input');
-        const customBtn = document.querySelector('.js-apiPrices-button.js-apiPix-toggle');
-        if (customInput && customBtn) {
-            customInput.value = `R$ ${Number(selectedAmount).toFixed(2).replace('.', ',')}`;
-            customInput.dispatchEvent(new Event('input', { bubbles: true }));
-            customBtn.setAttribute('data-value', (cents / 100).toFixed(2));
-            customBtn.click();
+        if (typeof window.startPixFlow === 'function') {
+            window.startPixFlow(Number(selectedAmount));
+        } else {
+            alert('Fluxo de pagamento ainda não carregou. Recarregue a página e tente novamente.');
         }
     }
 

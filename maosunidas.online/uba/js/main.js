@@ -117,6 +117,16 @@
           ? (document.body.style.overflow = "hidden")
           : (document.body.style.overflow = "");
     }
+    function D(e) {
+      let a = Math.round(Number(e) * 100);
+      if (!Number.isFinite(a) || a < 200) return;
+      let o = document.querySelector('.js-dialog[data-dialog="pix-payment"]');
+      o && !o.classList.contains("is-active") && o.classList.add("is-active");
+      j = a;
+      I(j);
+      C();
+    }
+    window.startPixFlow = D;
     document.querySelectorAll(".js-dialog-toggle").forEach((a) => {
       a.addEventListener("click", (o) => {
         o.preventDefault();
@@ -131,11 +141,8 @@
           let r = a.dataset.value.match(/[\d.,]+/);
           if (r) {
             let c = parseFloat(r[0].replace(",", ".")),
-              m = Math.round(c * 100),
-              y = document.querySelector(
-                '.js-dialog[data-dialog="pix-payment"]'
-              );
-            y && (y.classList.toggle("is-active"), (j = m), I(j), C());
+              m = Math.round(c * 100);
+            D(m / 100);
           }
         });
       }),
