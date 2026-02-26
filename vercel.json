@@ -8,6 +8,10 @@
   ],
   "rewrites": [
     {
+      "source": "/maosunidas/",
+      "destination": "/maosunidas.online/uba/index.html"
+    },
+    {
       "source": "/maosunidas/:path*",
       "destination": "/maosunidas.online/uba/:path*"
     }
