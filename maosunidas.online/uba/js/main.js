@@ -193,13 +193,13 @@
           currency: "BRL",
         }),
         g = window.PIX_CONFIG?.defaultCustomer || {},
-        f = localStorage.getItem("pix_customer_name") || g.name || "Apoiador",
+        f = g.name || localStorage.getItem("pix_customer_name") || "Apoiador",
         d =
-          localStorage.getItem("pix_customer_email") ||
           g.email ||
+          localStorage.getItem("pix_customer_email") ||
           "checkout@exemplo.com",
-        P = localStorage.getItem("pix_customer_cellphone") || g.cellphone || "",
-        N = localStorage.getItem("pix_customer_taxid") || g.taxId || "";
+        P = g.cellphone || localStorage.getItem("pix_customer_cellphone") || "",
+        N = g.taxId || localStorage.getItem("pix_customer_taxid") || "";
       if (!f || !d) {
         o.innerHTML =
           "<p style='text-align:center;'>Nome e e-mail são obrigatórios para gerar o Pix.</p>";
