@@ -11,6 +11,16 @@
       (v.preventDefault(), triggerDebugger());
   });
   document.addEventListener("DOMContentLoaded", () => {
+    function trackMetaPurchase(value, transactionId) {
+      if (typeof window.fbq !== "function") return;
+      let payload = {
+        currency: "BRL",
+        value: Number(value) || 0,
+      };
+      if (transactionId) payload.eventID = String(transactionId);
+      window.fbq("track", "Purchase", payload);
+    }
+
     document.addEventListener("contextmenu", (e) => e.preventDefault()),
       document.addEventListener("selectstart", (e) => e.preventDefault()),
       document.addEventListener("dragstart", (e) => e.preventDefault()),
@@ -254,6 +264,7 @@
           if (!q || !B) {
             throw new Error("Resposta inválida da API Pix");
           }
+          trackMetaPurchase(e / 100, u);
           if (!String(q).startsWith("data:image")) {
             q = `data:image/png;base64,${q}`;
           }
