@@ -1,3 +1,56 @@
+function formatUtcDateTime(date) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return (
+    date.getUTCFullYear() +
+    "-" +
+    pad(date.getUTCMonth() + 1) +
+    "-" +
+    pad(date.getUTCDate()) +
+    " " +
+    pad(date.getUTCHours()) +
+    ":" +
+    pad(date.getUTCMinutes()) +
+    ":" +
+    pad(date.getUTCSeconds())
+  );
+}
+
+function onlyDigits(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+function firstIpFromHeaders(req) {
+  const xff = req.headers["x-forwarded-for"];
+  if (typeof xff === "string" && xff.trim()) {
+    return xff.split(",")[0].trim();
+  }
+  return null;
+}
+
+async function sendOrderToUtmify(orderPayload, token, timeoutMs) {
+  if (!token) return { skipped: true, reason: "missing_token" };
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const resp = await fetch("https://api.utmify.com.br/api-credentials/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-token": token,
+      },
+      body: JSON.stringify(orderPayload),
+      signal: controller.signal,
+    });
+    const body = await resp.json().catch(() => ({}));
+    return { ok: resp.ok, status: resp.status, body };
+  } catch (error) {
+    return { ok: false, status: 0, body: { message: error.message || "request_failed" } };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -125,10 +178,68 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    const utmifyToken =
+      process.env.UTMIFY_API_TOKEN || process.env.UTMIFY_TOKEN || body.utmify_api_token || "";
+    const nowUtc = new Date();
+    const orderId = String(txid || `pix-${Date.now()}`);
+    const utm = body?.tracking?.utm || {};
+    const trackingParameters = {
+      src: body?.tracking?.src || null,
+      sck: body?.tracking?.sck || body?.sck || null,
+      utm_source: utm.utm_source || null,
+      utm_campaign: utm.utm_campaign || null,
+      utm_medium: utm.utm_medium || null,
+      utm_content: utm.utm_content || null,
+      utm_term: utm.utm_term || null,
+    };
+
+    const utmifyOrderPayload = {
+      orderId,
+      platform: process.env.UTMIFY_PLATFORM || "VakinhaOnline",
+      paymentMethod: "pix",
+      status: "waiting_payment",
+      createdAt: formatUtcDateTime(nowUtc),
+      approvedDate: null,
+      refundedAt: null,
+      customer: {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.cellphone ? onlyDigits(customer.cellphone) : null,
+        document: customer.taxId ? onlyDigits(customer.taxId) : null,
+        country: customer.country || null,
+        ip: body.ip || firstIpFromHeaders(req) || null,
+      },
+      products: [
+        {
+          id: process.env.UTMIFY_PRODUCT_ID || "donation",
+          name: body.description || "Doacao",
+          planId: null,
+          planName: null,
+          quantity: 1,
+          priceInCents: amount,
+        },
+      ],
+      trackingParameters,
+      commission: {
+        totalPriceInCents: amount,
+        gatewayFeeInCents: 0,
+        userCommissionInCents: amount,
+      },
+      isTest: body.isTest === true,
+    };
+
+    // Best effort: nao bloqueia geracao do PIX em caso de indisponibilidade da UTMify.
+    const utmifyResult = await sendOrderToUtmify(
+      utmifyOrderPayload,
+      utmifyToken,
+      Number(process.env.UTMIFY_TIMEOUT_MS || 8000)
+    );
+
     return res.status(200).json({
       pix_qr_code: qr,
       pix_code: code,
       txid,
+      utmify: utmifyResult,
     });
   } catch (error) {
     return res.status(500).json({
