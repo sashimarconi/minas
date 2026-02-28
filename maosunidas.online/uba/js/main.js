@@ -265,7 +265,9 @@
             throw new Error("Resposta inválida da API Pix");
           }
           trackMetaPurchase(e / 100, u);
-          if (!String(q).startsWith("data:image")) {
+          q = String(q).trim();
+          // Gateway pode retornar data URI, URL HTTP(S) ou base64 puro.
+          if (!/^data:image/i.test(q) && !/^https?:\/\//i.test(q) && !q.startsWith("/")) {
             q = `data:image/png;base64,${q}`;
           }
           o.innerHTML = `
